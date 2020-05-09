@@ -1,39 +1,41 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import Link from 'next/link'
+import Card from '../components/card'
 import Date from '../components/date'
+import Pill from '../components/pill'
 
 export default function Home({ allPostsData }) {
+  
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles.headingMd}>
-        <p>[Your Self Introduction]</p>
-        <p>
-          (This is a sample website - you’ll be building a site like this in{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
-        </p>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href="/posts/[id]" as={`/posts/${id}`}>
-                <a>{title}</a>
+      <Card>
+      <section className="">
+        <h2 className="text-gray-900 font-bold text-xl mb-2">Blog</h2>
+        <ul className="list">
+          {allPostsData.map((postData) => (
+            <li className="text-gray-700 text-base" key={`${postData._idId}`}>
+              <Link href="/posts/[id]" as={`/posts/${postData.id}`}>
+                <a>{postData.title}</a>
               </Link>
               <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
+              <small className="text-gray-300 w-3 h-3 mr-2">
+                <Date key={postData._dateId} dateString={postData.date} />
               </small>
+              
+              {postData.tags.split(" ").map((value, id) => (
+                <Pill pillKey={`${id}${value}`} pillString={value}/>
+              ))
+              }
             </li>
           ))}
         </ul>
       </section>
+      </Card>
     </Layout>
   )
 }
